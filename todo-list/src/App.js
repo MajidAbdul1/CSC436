@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import UserBar from "./UserBar";
 import Todo from "./Todo";
+import ListTodo from "./ListTodo.js";
 
 function App() {
 
@@ -23,7 +24,7 @@ function App() {
     <div>
       <UserBar user={user} setUser={setUser} />
       <Todo user={setUser} />
-      <TodoList todos={todos} />
+      <ListTodo todos={todos} />
     </div>
   );
 }

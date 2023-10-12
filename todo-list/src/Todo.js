@@ -1,21 +1,11 @@
+import React from "react";
+import { v4 as uuidv4 } from "uuid";
 
-export default function Todo({ title, description, author, dateCreated, complete, dateCompleted, onToggleComplete }) {
+export default function Todo({ id, title, completed }) {
     return (
         <div>
-            <h3>{title}</h3>
-            {description && <p>{description}</p>}
-            <p>Author: {author}</p>
-            <p>Created: {new Date(dateCreated).toLocaleString()}</p>
-            <input
-                type="checkbox"
-                checked={complete}
-                onChange={onToggleComplete} // Toggle the "complete" field
-            />{" "}
-            Complete
-            {complete && (
-                <p>Completed: {new Date(dateCompleted).toLocaleString()}</p>
-            )}
+            <input type="checkbox" id={id} defaultChecked={completed} />
+            <label htmlFor={id}>{title}</label>
         </div>
     );
 }
-

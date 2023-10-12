@@ -1,68 +1,33 @@
-import TodoItem from './TodoItem';
+import React, { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import ListTodo from "./ListTodo.js";
 
-export default function TodoList() {
+export default function TodoForm() {
     const [todos, setTodos] = useState([]);
-    const [newTodo, setNewTodo] = useState({
-        title: '',
-        description: '',
-        complete: false,
-    });
+    const [title, setTitle] = useState("");
 
-    const handleInputChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setNewTodo({
-            ...newTodo,
-            [name]: type === 'checkbox' ? checked : value,
-        });
-    };
-
-    const addTodo = () => {
-        if (newTodo.title.trim() !== '') {
-            const todo = {
-                ...newTodo,
-                author: 'Current User', // Replace with actual username
-                dateCreated: Date.now(),
-                dateCompleted: null,
-            };
-            setTodos([...todos, todo]);
-            setNewTodo({ title: '', description: '', complete: false });
+    const addTodo = (e) => {
+        e.preventDefault();
+        if (title.trim()) {
+            setTodos([
+                ...todos,
+                { id: uuidv4(), title, completed: false },
+            ]);
+            setTitle("");
         }
-    };
-
-    const toggleComplete = (index) => {
-        const updatedTodos = [...todos];
-        updatedTodos[index].complete = !updatedTodos[index].complete;
-        updatedTodos[index].dateCompleted = updatedTodos[index].complete
-            ? Date.now()
-            : null;
-        setTodos(updatedTodos);
     };
 
     return (
         <div>
-            <h2>Todo List</h2>
-            <input
-                type="text"
-                name="title"
-                value={newTodo.title}
-                placeholder="Title"
-                onChange={handleInputChange}
-            />
-            <textarea
-                name="description"
-                value={newTodo.description}
-                placeholder="Description"
-                onChange={handleInputChange}
-            />
-            <button onClick={addTodo}>Add Todo</button>
-            {todos.map((todo, index) => (
-                <TodoItem
-                    key={index}
-                    {...todo}
-                    onToggleComplete={() => toggleComplete(index)}
+            <form onSubmit={addTodo}>
+                <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                 />
-            ))}
+                <button type="submit">Add Todo</button>
+            </form>
+            <ListTodo todos={todos} />
         </div>
     );
 }
-
