@@ -1,33 +1,39 @@
-import React, { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import ListTodo from "./ListTodo.js";
+import React, { useState } from 'react';
+export default function TodoForm({ user, dispatchTodos }) {
 
-export default function TodoForm() {
-    const [todos, setTodos] = useState([]);
     const [title, setTitle] = useState("");
-
-    const addTodo = (e) => {
+    const [description, setDescription] = useState("");
+    // Function to handle form submission
+    const handleSubmit = (e) => {
         e.preventDefault();
-        if (title.trim()) {
-            setTodos([
-                ...todos,
-                { id: uuidv4(), title, completed: false },
-            ]);
-            setTitle("");
-        }
+        dispatchTodos({
+
+            type: 'CREATE_TODO',
+            payload: {
+                title,
+                description,
+                author: user,
+                dateCreated: Date.now(),
+                complete: false,
+                dateCompleted: null
+            }
+        });
+        setTitle("");
+        setDescription("");
     };
 
     return (
-        <div>
-            <form onSubmit={addTodo}>
-                <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
-                <button type="submit">Add Todo</button>
-            </form>
-            <ListTodo todos={todos} />
-        </div>
+        <form onSubmit={handleSubmit}>
+            <div>Author: <b>{user}</b></div>
+            <div>
+                <label htmlFor="create-title">Title:</label>
+                <input type="text" name="create-title" id="create-title" value={title} onChange={e => setTitle(e.target.value)} required />
+            </div>
+            <div>
+                <label htmlFor="create-description">Description:</label>
+                <textarea name="create-description" id="create-description" value={description} onChange={e => setDescription(e.target.value)}></textarea>
+            </div>
+            <input type="submit" value="Add Todo" />
+        </form>
     );
 }
